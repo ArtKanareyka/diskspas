@@ -9,7 +9,7 @@
 <a href="../../releases/latest"><b>⬇ Скачать</b></a> ·
 <a href="https://artkanareyka.github.io/diskspas/">Сайт</a> ·
 <a href="docs/INSTRUCTIONS.md">Инструкция</a> ·
-<a href="https://t.me/ArtKanareyka">Помощь в Telegram</a>
+<a href="https://github.com/ArtKanareyka/diskspas/issues/new/choose">Вопросы и ошибки</a>
 </p>
 
 > ⭐ **Программа помогла? Поставьте звезду** (кнопка Star справа вверху). Так её находят другие люди, которым тоже не даёт скачать Диск.

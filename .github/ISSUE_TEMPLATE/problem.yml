@@ -1,0 +1,15 @@
+name: Не работает или есть вопрос
+description: Расскажите, что случилось
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: Что произошло
+      description: Что вы делали и что увидели. Токен и пароли сюда не вставляйте!
+    validations:
+      required: true
+  - type: input
+    id: system
+    attributes:
+      label: Система и версия программы
+      placeholder: Windows 11, ДискСпас 1.0.0

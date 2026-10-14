@@ -17,8 +17,8 @@ from .state import StateStore
 
 # Set after the OAuth app is verified so ordinary users can skip app creation.
 DEFAULT_CLIENT_ID = ""
-# Link for the "Help" button in the window (for example https://t.me/your_name). Empty = no button.
-DEFAULT_SUPPORT_URL = "https://t.me/ArtKanareyka"
+# Link for the "Help" button in the window (for example the repository issues page). Empty = no button.
+DEFAULT_SUPPORT_URL = "https://github.com/ArtKanareyka/diskspas/issues/new/choose"
 
 
 class AppError(Exception):
