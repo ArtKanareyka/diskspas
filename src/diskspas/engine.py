@@ -102,16 +102,16 @@ class Engine:
                     buf += b
                     with self.lock:
                         rec["done"] += len(b)
-                        self.stats["bytes_run"] += len(b)
             if not buf:
                 raise EmptyResponse("сервер хранения Яндекса не отдал данные (0 байт)")
             if len(buf) != end - start + 1:
                 raise RuntimeError(f"обрыв передачи: получено {len(buf)} из {end - start + 1} байт")
+            with self.lock:                      # counted only once the whole piece is valid: speed never goes negative
+                self.stats["bytes_run"] += len(buf)
             return buf
         except BaseException:
             with self.lock:
                 rec["done"] -= len(buf)
-                self.stats["bytes_run"] -= len(buf)
             raise
 
     # ---- one file ----------------------------------------------------
