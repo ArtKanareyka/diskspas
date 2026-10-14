@@ -35,7 +35,7 @@ class PriorityTests(unittest.TestCase):
         self.assertEqual(tier("disk:/Photos/tiny.jpg", 100), 1)
         self.assertEqual(tier("disk:/x/data.bin", 5_000_000), 1)
         self.assertEqual(tier("disk:/Backup/AppData/Local/cache.bin", 5_000_000), 2)
-        self.assertEqual(tier("disk:/Games/minecraft/world/level.dat", 5_000_000), 1)   # game saves are real data
+        self.assertEqual(tier("disk:/Games/saves/world/level.dat", 5_000_000), 1)   # game saves are real data
         self.assertEqual(tier("disk:/a/~$report.docx", 162), 2)
         self.assertEqual(tier("disk:/a/Desktop.ini", 100), 2)
 

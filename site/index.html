@@ -3,8 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ДискСпас — скачать файлы с Яндекс Диска, когда он не отдаёт</title>
-<meta name="description" content="Программа для компьютера: надёжно скачивает ваши файлы с Яндекс Диска, даже когда официальный клиент выдаёт ошибки 502/504 и зависает. Только чтение, без пароля.">
+<title>ДискСпас — скачать файлы с Яндекс Диска, если он выдаёт ошибки 502 и 504</title>
+<meta name="description" content="Бесплатная программа с открытым кодом: скачивает все файлы с Яндекс Диска, когда официальный клиент зависает или падает с ошибками 502/504. Докачка, автоподбор скорости, скачивание по ссылке «поделиться». Только чтение, без пароля.">
+<link rel="canonical" href="https://artkanareyka.github.io/diskspas/">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="ДискСпас — скачать файлы с Яндекс Диска, если он выдаёт ошибки 502 и 504">
+<meta property="og:description" content="Бесплатная программа с открытым кодом: скачивает все файлы с Яндекс Диска, когда официальный клиент зависает или падает с ошибками 502/504. Докачка, автоподбор скорости, скачивание по ссылке «поделиться». Только чтение, без пароля.">
+<meta property="og:url" content="https://artkanareyka.github.io/diskspas/">
+<meta property="og:image" content="https://artkanareyka.github.io/diskspas/icon.png">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#4f6df5">
 <link rel="icon" href="icon.png">
 <style>
 :root{--bg:#f6f7fb;--card:#fff;--tx:#1b1e2b;--mut:#5d6479;--ac:#4f6df5;--ac2:#8b5cf6;--or:#ff7a45;--ln:#e3e6f0}
@@ -34,16 +44,17 @@ summary{cursor:pointer;font-weight:600}details p{color:var(--mut);margin:10px 0 
 footer{padding:30px 0 50px;color:var(--mut);font-size:14px;text-align:center}footer a{color:var(--mut)}
 @media(max-width:560px){header nav{display:none}.btn.ghost{margin:10px 0 0}}
 </style>
+<script type="application/ld+json">[{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "ДискСпас", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Windows, macOS, Linux", "inLanguage": "ru", "description": "Бесплатная программа с открытым кодом: скачивает все файлы с Яндекс Диска, когда официальный клиент зависает или падает с ошибками 502/504. Докачка, автоподбор скорости, скачивание по ссылке «поделиться». Только чтение, без пароля.", "url": "https://artkanareyka.github.io/diskspas/", "downloadUrl": "https://github.com/ArtKanareyka/diskspas/releases/latest", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "RUB"}, "license": "https://github.com/ArtKanareyka/diskspas/blob/main/LICENSE"}, {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Почему клиент Яндекс Диска выдаёт ошибки 502 и 504 и не скачивает файлы?", "acceptedAnswer": {"@type": "Answer", "text": "Часть серверов хранения принимает соединение, но не отдаёт данные: клиент ждёт, получает 502/504 и начинает заново. ДискСпас быстро определяет такие ответы, откладывает файл и возвращается к нему позже."}}, {"@type": "Question", "name": "Как скачать весь Яндекс Диск на компьютер?", "acceptedAnswer": {"@type": "Answer", "text": "Запустите ДискСпас, войдите с токеном только на чтение, выберите «Весь Диск» и папку на компьютере. Остановить и продолжить можно в любой момент."}}, {"@type": "Question", "name": "Можно ли скачать файлы по ссылке «поделиться» disk.yandex.ru/d/…?", "acceptedAnswer": {"@type": "Answer", "text": "Да. Вставьте ссылку в окно программы: токен и вход в аккаунт не нужны."}}, {"@type": "Question", "name": "Программа меняет или удаляет файлы на Диске?", "acceptedAnswer": {"@type": "Answer", "text": "Нет. Токен выдаётся только на чтение."}}]}]</script>
 </head>
 <body>
 <div class="w">
 <header><img src="icon.png" alt=""><b>ДискСпас</b>
-<nav><a href="#how">Как это работает</a><a href="#safe">Безопасность</a><a href="#faq">Вопросы</a></nav></header>
+<nav><a href="https://github.com/ArtKanareyka/diskspas">GitHub</a><a href="#how">Как это работает</a><a href="#safe">Безопасность</a><a href="#faq">Вопросы</a></nav></header>
 
 <div class="hero">
 <h1>Спасаем файлы<br>с <span>Яндекс Диска</span></h1>
 <p>Клиент Яндекс Диска выдаёт ошибки 502 и 504, зависает и бесконечно перезапускается? ДискСпас обходит «больные» серверы и скачивает ваши файлы на компьютер.</p>
-<a class="btn" href="#get">Получить программу</a><a class="btn ghost" href="#how">Как это работает</a>
+<a class="btn" href="#get">Скачать бесплатно</a><a class="btn ghost" href="#how">Как это работает</a>
 </div>
 
 <section>
@@ -75,10 +86,10 @@ footer{padding:30px 0 50px;color:var(--mut);font-size:14px;text-align:center}foo
 <li>Проверить можно самому: в «Мониторе ресурсов» видно, что программа обращается только к серверам Яндекса.</li>
 </ul></div></section>
 
-<section id="get"><h2>Получить программу</h2>
-<div class="card price"><p>Версия для Windows. Напишите в Telegram: пришлю ссылку на скачивание и помогу с запуском.</p>
-<p style="margin:16px 0 4px"><a class="btn" href="https://t.me/ArtKanareyka">Написать в Telegram</a></p>
-<p style="font-size:14px">@ArtKanareyka</p></div></section>
+<section id="get"><h2>Скачать бесплатно</h2>
+<div class="card price"><p>Программа бесплатная, с открытым кодом (лицензия MIT). Без установки: скачали, запустили двойным кликом.</p>
+<p style="margin:16px 0 4px"><a class="btn" href="https://github.com/ArtKanareyka/diskspas/releases/latest">Скачать ДискСпас</a><a class="btn ghost" href="https://github.com/ArtKanareyka/diskspas">&#9733; Поставить звезду на GitHub</a></p>
+<p style="font-size:14px">Помогло? Звезда на GitHub помогает другим найти программу. Вопросы: <a href="https://t.me/ArtKanareyka">@ArtKanareyka</a> в Telegram.</p></div></section>
 
 <section id="faq"><h2>Вопросы</h2>
 <details><summary>Почему официальный клиент не справляется?</summary><p>Часть серверов хранения принимает соединение, но не отдаёт данные: клиент ждёт, получает 502/504 и начинает заново. ДискСпас быстро определяет такие ответы, откладывает файл и возвращается к нему позже.</p></details>
@@ -89,6 +100,6 @@ footer{padding:30px 0 50px;color:var(--mut);font-size:14px;text-align:center}foo
 </section>
 
 <footer>ДискСпас не связан с компанией «Яндекс». «Яндекс» и «Яндекс Диск» — товарные знаки их владельцев.<br>
-Поддержка: <a href="https://t.me/ArtKanareyka">@ArtKanareyka</a></footer>
+Исходный код: <a href="https://github.com/ArtKanareyka/diskspas">GitHub</a> · Поддержка: <a href="https://t.me/ArtKanareyka">@ArtKanareyka</a></footer>
 </div>
 </body></html>
