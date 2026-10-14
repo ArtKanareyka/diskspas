@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+build/
+dist/
+*.spec
+*.egg-info/
+.venv/
+# never commit credentials or downloaded data
+token
+*.token
+.env
+.diskspas/

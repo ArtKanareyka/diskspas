@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ДискСпас — скачать файлы с Яндекс Диска, когда он не отдаёт</title>
+<meta name="description" content="Программа для компьютера: надёжно скачивает ваши файлы с Яндекс Диска, даже когда официальный клиент выдаёт ошибки 502/504 и зависает. Только чтение, без пароля.">
+<link rel="icon" href="icon.png">
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--tx:#1b1e2b;--mut:#5d6479;--ac:#4f6df5;--ac2:#8b5cf6;--or:#ff7a45;--ln:#e3e6f0}
+@media(prefers-color-scheme:dark){:root{--bg:#12141c;--card:#1b1e2b;--tx:#eceef6;--mut:#a0a7bd;--ln:#2b3042}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--tx);font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:960px;margin:0 auto;padding:0 16px}
+header{display:flex;align-items:center;gap:10px;padding:18px 0}
+header b{font-size:20px}header img{width:34px;height:34px;border-radius:9px}
+header nav{margin-left:auto;display:flex;gap:18px}header a{color:var(--mut);text-decoration:none;font-size:15px}
+.hero{text-align:center;padding:48px 0 36px}
+.hero h1{font-size:clamp(30px,6vw,48px);line-height:1.15;margin:0 0 14px}
+.hero h1 span{background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--mut);max-width:620px;margin:0 auto 26px;font-size:19px}
+.btn{display:inline-block;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;text-decoration:none;font-weight:600;padding:14px 28px;border-radius:12px;box-shadow:0 6px 20px rgba(79,109,245,.35)}
+.btn.ghost{background:none;color:var(--ac);box-shadow:none;border:1px solid var(--ln);margin-left:8px}
+section{padding:34px 0}h2{font-size:28px;margin:0 0 18px;text-align:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:20px}
+.card h3{margin:0 0 6px;font-size:18px}.card p{margin:0;color:var(--mut);font-size:15.5px}
+.n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--or);color:#fff;font-weight:700;margin-bottom:8px}
+ul.ok{list-style:none;padding:0;margin:0}ul.ok li{padding:7px 0 7px 28px;position:relative}
+ul.ok li::before{content:"✓";position:absolute;left:0;color:var(--ac);font-weight:700}
+details{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:14px 18px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600}details p{color:var(--mut);margin:10px 0 0}
+.price{text-align:center}
+footer{padding:30px 0 50px;color:var(--mut);font-size:14px;text-align:center}footer a{color:var(--mut)}
+@media(max-width:560px){header nav{display:none}.btn.ghost{margin:10px 0 0}}
+</style>
+</head>
+<body>
+<div class="w">
+<header><img src="icon.png" alt=""><b>ДискСпас</b>
+<nav><a href="#how">Как это работает</a><a href="#safe">Безопасность</a><a href="#faq">Вопросы</a></nav></header>
+
+<div class="hero">
+<h1>Спасаем файлы<br>с <span>Яндекс Диска</span></h1>
+<p>Клиент Яндекс Диска выдаёт ошибки 502 и 504, зависает и бесконечно перезапускается? ДискСпас обходит «больные» серверы и скачивает ваши файлы на компьютер.</p>
+<a class="btn" href="#get">Получить программу</a><a class="btn ghost" href="#how">Как это работает</a>
+</div>
+
+<section>
+<div class="grid">
+<div class="card"><h3>Не застревает</h3><p>Если сервер вернул пустой ответ или ошибку, файл откладывается и повторяется позже, а остальные продолжают качаться.</p></div>
+<div class="card"><h3>Сама подбирает скорость</h3><p>Число одновременных загрузок растёт, пока растёт скорость, и снижается при перегрузке. Ничего настраивать не нужно.</p></div>
+<div class="card"><h3>Докачка</h3><p>Остановили, выключили компьютер, пропал интернет — продолжит с того же места, скачанное не качается заново.</p></div>
+<div class="card"><h3>Сначала важное</h3><p>Фото, видео и документы идут вперёд, служебные и временные файлы — в самый конец или вообще пропускаются.</p></div>
+<div class="card"><h3>Ссылки «поделиться»</h3><p>Вам прислали ссылку disk.yandex.ru/d/… ? Вставьте её, и программа скачает всё по ней, без входа в аккаунт.</p></div>
+<div class="card"><h3>Проверка целостности</h3><p>Контрольная сумма считается прямо во время скачивания, повреждённые файлы не остаются незамеченными.</p></div>
+</div>
+</section>
+
+<section id="how"><h2>Как это работает</h2>
+<div class="grid">
+<div class="card"><span class="n">1</span><h3>Запустите</h3><p>Скачайте программу и откройте двойным кликом. Установка не нужна. Откроется окно в браузере.</p></div>
+<div class="card"><span class="n">2</span><h3>Войдите или вставьте ссылку</h3><p>Для своего Диска нужен токен только на чтение (в окне есть пошаговая подсказка). Для ссылки «поделиться» ничего не нужно.</p></div>
+<div class="card"><span class="n">3</span><h3>Выберите что и куда</h3><p>Весь Диск или отдельные папки, место на компьютере. Программа покажет размер и проверит свободное место.</p></div>
+<div class="card"><span class="n">4</span><h3>Ждите</h3><p>Видно скорость и сколько осталось. Окно можно закрыть: загрузка продолжится, пока работает программа.</p></div>
+</div>
+</section>
+
+<section id="safe"><h2>Это безопасно?</h2>
+<div class="card"><ul class="ok">
+<li><b>Работает только на вашем компьютере.</b> У программы нет своих серверов, она не отправляет ваши файлы или данные нам.</li>
+<li><b>Пароль от Яндекса не нужен.</b> Вместо него Яндекс выдаёт токен с правом только на чтение: изменить или удалить что-то на Диске с ним нельзя.</li>
+<li>Токен хранится у вас на компьютере и отправляется только Яндексу. Нет рекламы и аналитики.</li>
+<li>Доступ можно отозвать в любой момент на странице id.yandex.ru/security/access.</li>
+<li>Проверить можно самому: в «Мониторе ресурсов» видно, что программа обращается только к серверам Яндекса.</li>
+</ul></div></section>
+
+<section id="get"><h2>Получить программу</h2>
+<div class="card price"><p>Версия для Windows. Напишите в Telegram: пришлю ссылку на скачивание и помогу с запуском.</p>
+<p style="margin:16px 0 4px"><a class="btn" href="https://t.me/ArtKanareyka">Написать в Telegram</a></p>
+<p style="font-size:14px">@ArtKanareyka</p></div></section>
+
+<section id="faq"><h2>Вопросы</h2>
+<details><summary>Почему официальный клиент не справляется?</summary><p>Часть серверов хранения принимает соединение, но не отдаёт данные: клиент ждёт, получает 502/504 и начинает заново. ДискСпас быстро определяет такие ответы, откладывает файл и возвращается к нему позже.</p></details>
+<details><summary>Всё ли удастся скачать?</summary><p>Не гарантируем. Если серверы Яндекса упорно не отдают отдельные файлы, они остаются в отчёте, и программа докачает их при следующем запуске с той же папкой.</p></details>
+<details><summary>Программа что-то меняет или удаляет на Диске?</summary><p>Нет. Токен выдаётся только на чтение. Не удаляйте файлы из облака, пока не убедились, что копия в порядке.</p></details>
+<details><summary>Это сервис Яндекса?</summary><p>Нет. ДискСпас — независимая программа, не связанная с Яндексом и не одобренная им. Она использует открытый API Диска.</p></details>
+<details><summary>Windows пишет «Неизвестный издатель»</summary><p>Программа пока не подписана платным сертификатом, поэтому Windows может показать предупреждение. Нажмите «Подробнее» → «Выполнить в любом случае».</p></details>
+</section>
+
+<footer>ДискСпас не связан с компанией «Яндекс». «Яндекс» и «Яндекс Диск» — товарные знаки их владельцев.<br>
+Поддержка: <a href="https://t.me/ArtKanareyka">@ArtKanareyka</a></footer>
+</div>
+</body></html>

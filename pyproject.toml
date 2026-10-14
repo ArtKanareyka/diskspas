@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "diskspas"
+version = "1.0.0"
+description = "ДискСпас: устойчивое скачивание файлов с Яндекс Диска (только чтение), с докачкой и автоподбором скорости"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = []
+
+[project.scripts]
+diskspas = "diskspas.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
