@@ -202,9 +202,19 @@ class UiTests(UiBase):
         root = os.path.abspath(os.sep)
         self.assertEqual(self.call("POST", "/api/start", {"dest": root})[1]["code"], "root_dest")
         self.assertFalse(os.path.exists(os.path.join(os.getcwd(), ".diskspas")))   # nothing written to cwd
-        self.app.plan["bytes"] = 10 ** 18
+        self.app.plan_items[0]["size"] = 10 ** 18
         code, d = self.call("POST", "/api/start", {"dest": self.dest})
         self.assertEqual((code, d["code"]), (400, "no_space"))
+
+    def test_remaining_ignores_existing(self):
+        self.login()
+        self.scan()
+        total = self.app.plan["bytes"]
+        r = self.call("GET", "/api/remaining?path=" + self.dest)[1]
+        self.assertEqual((r["need"], r["already"]), (total, 0))
+        self.run_job()
+        r = self.call("GET", "/api/remaining?path=" + self.dest)[1]
+        self.assertEqual((r["need"], r["already"]), (0, total))
 
 
 class ControlTests(UiBase):

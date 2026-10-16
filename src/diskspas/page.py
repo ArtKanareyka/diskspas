@@ -105,7 +105,7 @@ where_h:"Куда сохранить",where_lead:"Выберите папку н
 quick:"Быстрый переход",drives:"Диски",up:"Наверх",roots:"Все диски",newfolder:"Создать папку",create:"Создать",folder_name:"Имя новой папки",
 path:"Путь",go:"Перейти",choose:"Выбрать эту папку",dest_is:"Папка назначения",free:"свободно {0}",not_chosen:"не выбрана",
 review_h:"Всё готово к запуску?",scanning:"Сканирую Диск… Найдено файлов: {0}",scan_err:"Не удалось просканировать Диск: {0}",retry:"Попробовать снова",
-sum_files:"Файлов",sum_size:"Общий размер",sum_free:"Свободно на диске",sum_dest:"Куда",junk_info:"Из них служебных и временных: {0} шт. ({1})",junk_skipped:"Служебные и временные файлы пропущены: {0} шт. ({1}).",
+sum_files:"Файлов",sum_size:"Общий размер",sum_free:"Свободно на диске",sum_have:"Уже скачано",sum_need:"Осталось скачать",sum_dest:"Куда",junk_info:"Из них служебных и временных: {0} шт. ({1})",junk_skipped:"Служебные и временные файлы пропущены: {0} шт. ({1}).",
 no_space:"Не хватает места: нужно {0}, свободно {1}. Выберите другую папку или освободите место.",
 start:"Начать скачивание",
 prog_h:"Загрузка",ph_listing:"подготовка",ph_downloading:"идёт загрузка",ph_done:"готово",ph_stopped:"остановлено",ph_error:"ошибка",ph_starting:"запуск",ph_unfinished:"почти готово, часть файлов ждёт",
@@ -258,12 +258,13 @@ function scrWhere(m){
   const start=S.dest||(S.st&&S.st.dest)||"";if(S.st&&S.st.dest&&!S.dest)S.dest=S.st.dest;updDest();loadFs(start)}
 
 /* ---------- step 4: review ---------- */
+function savePrefs(){api("/api/prefs",{mode:S.mode,selection:[...S.selection],skip_junk:S.skipJunk,verify:S.verify,max_threads:S.maxThr}).catch(()=>{})}
 function scanSig(){return JSON.stringify([S.mode,[...S.selection].sort(),S.skipJunk])}
 async function scrReview(m){
   S.rvSig="";m.appendChild(h("div",{class:"card",id:"rv"}));
   const st=S.st,sig=scanSig();
   if(!(st.scan.state==="done"&&S.scanSig===sig)&&st.scan.state!=="scanning"){
-    S.scanSig=sig;try{await api("/api/scan",{selection:S.mode==="all"?[]:[...S.selection],skip_junk:S.skipJunk})}catch(e){$("rv").textContent=errText(e);return}
+    S.scanSig=sig;savePrefs();try{await api("/api/scan",{selection:S.mode==="all"?[]:[...S.selection],skip_junk:S.skipJunk})}catch(e){$("rv").textContent=errText(e);return}
     await refresh()}
   renderReview()}
 async function renderReview(){
@@ -274,20 +275,23 @@ async function renderReview(){
     box.appendChild(h("div",{class:"acts"},h("button",{class:"ghost",onclick:()=>show(3)},t("back"))));return}
   if(sc.state==="error"){box.appendChild(h("p",{class:"bad"},t("scan_err",sc.error)));
     box.appendChild(h("div",{class:"acts"},h("button",{class:"ghost",onclick:()=>show(3)},t("back")),h("button",{onclick:()=>{S.scanSig="";show(4)}},t("retry"))));return}
-  const p=st.plan;let free=null;try{free=(await api("/api/fs?path="+encodeURIComponent(S.dest))).free}catch(e){}
-  const short=free!=null&&p.bytes>free;
+  const p=st.plan;let free=null,need=p.bytes,have=0;
+  try{const r=await api("/api/remaining?path="+encodeURIComponent(S.dest));free=r.free;need=r.need;have=r.already}catch(e){}
+  const short=free!=null&&need>free;
   box.appendChild(h("div",{class:"k"},
     h("div",null,h("span",null,t("sum_files")),h("b",null,p.files.toLocaleString())),
     h("div",null,h("span",null,t("sum_size")),h("b",null,sz(p.bytes))),
+    have>0?h("div",null,h("span",null,t("sum_have")),h("b",null,sz(have))):null,
+    have>0?h("div",null,h("span",null,t("sum_need")),h("b",null,sz(need))):null,
     h("div",null,h("span",null,t("sum_free")),h("b",{class:short?"bad":""},sz(free)))));
   box.appendChild(h("p",null,h("b",null,t("sum_dest")+": "),S.dest));
   if(p.skipped_junk)box.appendChild(h("p",{class:"mut"},t("junk_skipped",p.junk_files,sz(p.junk_bytes))));
   else if(p.junk_files)box.appendChild(h("p",{class:"mut"},t("junk_info",p.junk_files,sz(p.junk_bytes))));
-  if(short)box.appendChild(h("p",{class:"bad"},t("no_space",sz(p.bytes),sz(free))));
+  if(short)box.appendChild(h("p",{class:"bad"},t("no_space",sz(need),sz(free))));
   const err=h("p",{class:"bad"});
   box.appendChild(err);
   box.appendChild(h("div",{class:"acts"},h("button",{class:"ghost",onclick:()=>show(3)},t("back")),
-    h("button",{disabled:short||!S.dest,onclick:async()=>{err.textContent="";try{await api("/api/start",{dest:S.dest,options:{max_threads:S.maxThr,verify:S.verify}});await refresh();show(5)}catch(e){err.textContent=errText(e)}}},t("start"))))}
+    h("button",{disabled:short||!S.dest,onclick:async()=>{err.textContent="";try{savePrefs();await api("/api/start",{dest:S.dest,options:{max_threads:S.maxThr,verify:S.verify}});await refresh();show(5)}catch(e){err.textContent=errText(e)}}},t("start"))))}
 
 /* ---------- step 5: progress ---------- */
 function phaseText(j,running){if(j.paused)return t("paused");
@@ -347,6 +351,7 @@ async function tick(){
   const hb=$("help");if(S.st.support_url){hb.hidden=false;hb.href=S.st.support_url;hb.textContent=t("help")}else hb.hidden=true;
   if(!S.booted){S.booted=true;
     if(S.st.dest)S.dest=S.dest||S.st.dest;
+    const pf=S.st.prefs;if(pf){S.mode=pf.mode==="select"?"select":"all";S.selection=new Set(pf.selection||[]);S.skipJunk=!!pf.skip_junk;S.verify=pf.verify!==false;S.maxThr=pf.max_threads||128}
     show(!S.st.logged_in?1:(S.st.job?5:2));return}
   if(S.step===4)renderReview();else if(S.step===5)renderProgress();
   else if(S.step!==1&&!S.st.logged_in)show(1)}

@@ -20,6 +20,7 @@ GET = {
     "/api/status": lambda app, q, b: app.status(),
     "/api/tree": lambda app, q, b: app.tree(q.get("path", ["disk:/"])[0]),
     "/api/fs": lambda app, q, b: app.fs(q.get("path", [""])[0]),
+    "/api/remaining": lambda app, q, b: app.remaining(q.get("path", [""])[0]),
 }
 
 
@@ -28,6 +29,7 @@ POST = {
     "/api/login_public": lambda app, q, b: app.login_public(b.get("link")),
     "/api/logout": lambda app, q, b: app.logout(),
     "/api/scan": lambda app, q, b: app.start_scan(b.get("selection") or [], bool(b.get("skip_junk"))),
+    "/api/prefs": lambda app, q, b: app.save_prefs(b),
     "/api/start": lambda app, q, b: app.start(b.get("dest"), b.get("options")),
     "/api/pause": lambda app, q, b: app.pause(),
     "/api/resume": lambda app, q, b: app.resume(),

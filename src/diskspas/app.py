@@ -12,6 +12,7 @@ import time
 from . import __version__, auth
 from .api import DEFAULT_BASE, PUBLIC_BASE, Api, ApiError, AuthError, NotFound, PublicApi, normalize_public_link
 from .engine import Engine
+from .paths import local_path
 from .priority import tier
 from .state import StateStore
 
@@ -51,8 +52,14 @@ class App:
         self.engine = None
         self.thread = None
         self.dest = ""
+        link = self.settings.get("public_link")
+        if link:                                   # last session was from a shared link
+            try:
+                self.login_public(link)
+            except AppError:
+                self.settings.pop("public_link", None)
         token = auth.load_token(self.cfg_dir)
-        if token:
+        if token and self.api is None:
             self._try_token(token)
 
     # ---- settings -------------------------------------------------------
@@ -74,6 +81,19 @@ class App:
             json.dump(self.settings, f)
         os.replace(tmp, self._settings_path)
 
+    def _forget_public(self):
+        if self.settings.pop("public_link", None) is not None:
+            self.save_settings()
+
+    def save_prefs(self, prefs):
+        """Remember the UI choices (selection, junk, threads...) between launches."""
+        prefs = prefs if isinstance(prefs, dict) else {}
+        sel = [str(x) for x in (prefs.get("selection") or [])][:5000]
+        self.save_settings(prefs={"mode": "select" if prefs.get("mode") == "select" else "all", "selection": sel,
+                                  "skip_junk": bool(prefs.get("skip_junk")), "verify": bool(prefs.get("verify", True)),
+                                  "max_threads": max(4, min(256, int(prefs.get("max_threads") or 128)))})
+        return {"ok": True}
+
     # ---- login ------------------------------------------------------------
     def _try_token(self, token):
         api = Api(token, base=self.api_base)
@@ -94,6 +114,7 @@ class App:
         if not self._try_token(token):
             raise AppError("Яндекс не принял этот токен", "bad_token")
         auth.save_token(token, self.cfg_dir)
+        self._forget_public()
         if client_id:
             self.client_id = client_id.strip()
             self.save_settings(client_id=self.client_id)
@@ -113,6 +134,7 @@ class App:
         with self.lock:
             self.api, self.disk, self.public = api, None, {"name": info["name"], "link": url}
             self.plan = self.plan_items = None
+        self.save_settings(public_link=url)
         return self.status()
 
     def logout(self):
@@ -120,6 +142,8 @@ class App:
             raise AppError("Сначала остановите загрузку", "busy")
         if self.public is None:
             auth.delete_token(self.cfg_dir)
+        else:
+            self._forget_public()
         with self.lock:
             self.api = self.disk = self.public = self.plan = self.plan_items = None
             self.engine = None
@@ -137,7 +161,7 @@ class App:
                 "support_url": os.environ.get("DISKSPAS_SUPPORT_URL") or self.settings.get("support_url") or DEFAULT_SUPPORT_URL,
                 "authorize_url": auth.authorize_url(self.client_id) if self.client_id else "",
                 "dest": self.dest or self.settings.get("dest", ""), "scan": dict(self.scan_state),
-                "plan": self.plan, "running": self.running(), "job": None, "os": os.name,
+                "prefs": self.settings.get("prefs"), "plan": self.plan, "running": self.running(), "job": None, "os": os.name,
             }
         eng = self.engine
         if eng is not None:
@@ -280,6 +304,32 @@ class App:
         threading.Thread(target=work, daemon=True).start()
         return {"ok": True}
 
+    def remaining(self, dest):
+        """Bytes still to download into `dest`: files already there (and partial .part files) don't count."""
+        if self.plan_items is None:
+            raise AppError("Сначала просканируйте Диск", "no_plan")
+        dest = os.path.abspath((dest or "").strip() or ".")
+        prefix = "" if self.public is not None else "disk:"
+        need = already = 0
+        for it in self.plan_items:
+            size = int(it.get("size") or 0)
+            path = it["path"]
+            rel = path[len(prefix):].lstrip("/") if path.startswith(prefix) else it["name"]
+            out = local_path(dest, rel)
+            try:
+                if os.path.getsize(out) == size:
+                    already += size
+                    continue
+            except OSError:
+                pass
+            try:
+                have = min(os.path.getsize(out + ".part"), size)
+            except OSError:
+                have = 0
+            already += have
+            need += size - have
+        return {"need": need, "already": already, "free": shutil.disk_usage(dest).free if os.path.isdir(dest) else None}
+
     # ---- running a download ------------------------------------------------------
     def start(self, dest, options=None):
         api = self._need_login()
@@ -300,7 +350,7 @@ class App:
                 pass
         except OSError as e:
             raise AppError(f"В эту папку нельзя записать: {e.strerror or e}", "denied")
-        need, free = self.plan["bytes"], shutil.disk_usage(dest).free
+        need, free = self.remaining(dest)["need"], shutil.disk_usage(dest).free
         if need > free and not opts.get("force"):
             raise AppError(f"Не хватает места: нужно {need}, свободно {free}", "no_space")
 
